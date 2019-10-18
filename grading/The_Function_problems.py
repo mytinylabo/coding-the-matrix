@@ -2,10 +2,7 @@
 # Please fill out this stencil and submit using the provided submission script.
 
 
-
-
-
-## 1: (Problem 0.8.3) Tuple Sum
+# 1: (Problem 0.8.3) Tuple Sum
 def tuple_sum(A, B):
     '''
     Input:
@@ -21,11 +18,10 @@ def tuple_sum(A, B):
     >>> tuple_sum([(0,1),(-1,0),(2,2)], [(3,4),(5,6),(7,8)])
     [(3, 5), (4, 6), (9, 10)]
     '''
-    pass
+    return [(x1 + y1, x2 + y2) for (x1, x2), (y1, y2) in zip(A, B)]
 
 
-
-## 2: (Problem 0.8.4) Inverse Dictionary
+# 2: (Problem 0.8.4) Inverse Dictionary
 def inv_dict(d):
     '''
     Input:
@@ -36,11 +32,10 @@ def inv_dict(d):
     Example:
     >>> inv_dict({'goodbye':  'au revoir', 'thank you': 'merci'}) == {'merci':'thank you', 'au revoir':'goodbye'}
     '''
-    pass
+    return {v: k for k, v in d.items()}
 
 
-
-## 3: (Problem 0.8.5) Nested Comprehension
+# 3: (Problem 0.8.5) Nested Comprehension
 def row(p, n):
     '''
     Input:
@@ -52,21 +47,19 @@ def row(p, n):
     >>> row(10,4)
     [10, 11, 12, 13]
     '''
-    pass
-
-comprehension_with_row = ...
-
-comprehension_without_row = ...
+    return [i for i in range(p, p + n)]
 
 
+comprehension_with_row = [row(i, 20) for i in range(15)]
 
-## 4: (Problem 0.8.10) Probability Exercise 1
-Pr_f_is_even = ...
-Pr_f_is_odd  = ...
-
+comprehension_without_row = [[j for j in range(i, i + 20)] for i in range(15)]
 
 
-## 5: (Problem 0.8.11) Probability Exercise 2
-Pr_g_is_1    = ...
-Pr_g_is_0or2 = ...
+# 4: (Problem 0.8.10) Probability Exercise 1
+Pr_f_is_even = 0.7
+Pr_f_is_odd = 0.3
 
+
+# 5: (Problem 0.8.11) Probability Exercise 2
+Pr_g_is_1 = 0.4
+Pr_g_is_0or2 = 0.6

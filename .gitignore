@@ -1,4 +1,9 @@
+.vscode
+
+__pycache__
 .ipynb_checkpoints
+
+profile.txt
 stories_small.txt
 stories_big.txt
 voting_record_dump109.txt
