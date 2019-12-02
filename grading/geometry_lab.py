@@ -8,7 +8,9 @@ from mat import Mat
 from vec import Vec
 import math
 
-## Task 1
+# Task 1
+
+
 def identity():
     '''
     Return the matrix that, when multiplied by a location vector, yields the same location vector.
@@ -16,10 +18,12 @@ def identity():
     >>> identity() * Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1}) == Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1})
     True
     '''
-    pass
+    return Mat(({'x', 'y', 'u'}, {'x', 'y', 'u'}), {('x', 'x'): 1, ('y', 'y'): 1, ('u', 'u'): 1})
 
-## Task 2
-def translation(alpha,beta):
+# Task 2
+
+
+def translation(alpha, beta):
     '''
     Input:  a scalar alpha (the increase to the x-coordinate) and a scalar beta (the increase to the y-coordinate)
     Output:  3x3 matrix that, when multiplied by a location vector representing (x,y),
@@ -28,12 +32,14 @@ def translation(alpha,beta):
     >>> translation(4,-5) * Vec({'x','y','u'}, {'x':2, 'y':3, 'u':1}) == Vec({'x','y','u'}, {'x':6, 'y':-2, 'u':1})
     True
     '''
-    pass
+    return Mat(({'x', 'y', 'u'}, {'x', 'y', 'u'}), {('x', 'x'): 1, ('y', 'y'): 1, ('u', 'u'): 1, ('x', 'u'): alpha, ('y', 'u'): beta})
 
-## Task 3
+# Task 3
+
+
 def scale(alpha, beta):
     '''
-    Input:  a scalar alpha (the multiplier for the x-coordinate) and a scalar beta (the multiplier for the y-coordinate) 
+    Input:  a scalar alpha (the multiplier for the x-coordinate) and a scalar beta (the multiplier for the y-coordinate)
     Output:  3x3 matrix that, when multiplied by a locaiton vector representing (x,y),
                            yields the locaiton vector of the scaled point (alpha*x, beta*y).
 
@@ -42,9 +48,11 @@ def scale(alpha, beta):
     >>> scale(0,0)*Vec({'x','y','u'}, {'x':1,'y':1,'u':1}) == Vec({'x','y','u'}, {'u':1})
     True
     '''
-    pass
+    return Mat(({'x', 'y', 'u'}, {'x', 'y', 'u'}), {('x', 'x'): alpha, ('y', 'y'): beta, ('u', 'u'): 1})
 
-## Task 4
+# Task 4
+
+
 def rotation(theta):
     '''
     Input:  theta, the angle (in radians) to rotate an image.
@@ -61,7 +69,9 @@ def rotation(theta):
     '''
     pass
 
-## Task 5
+# Task 5
+
+
 def rotate_about(theta, x, y):
     '''
     Input:  an angle theta (in radians) by which to rotate, and x- and y- coordinates of a point to rotate about
@@ -72,7 +82,9 @@ def rotate_about(theta, x, y):
     '''
     pass
 
-## Task 6
+# Task 6
+
+
 def reflect_y():
     '''
     Input:  None.
@@ -85,7 +97,9 @@ def reflect_y():
     '''
     pass
 
-## Task 7
+# Task 7
+
+
 def reflect_x():
     '''
     Input:  None.
@@ -98,8 +112,10 @@ def reflect_x():
     '''
     pass
 
-## Task 8    
-def scale_color(scale_r,scale_g,scale_b):
+# Task 8
+
+
+def scale_color(scale_r, scale_g, scale_b):
     '''
     Input:  3 scaling parameters for the colors of the image.
     Output:  Corresponding 3x3 color scaling matrix.
@@ -109,7 +125,9 @@ def scale_color(scale_r,scale_g,scale_b):
     '''
     pass
 
-## Task 9
+# Task 9
+
+
 def grayscale():
     '''
     Input: None
@@ -117,7 +135,9 @@ def grayscale():
     '''
     pass
 
-## Task 10
+# Task 10
+
+
 def reflect_about(x1, y1, x2, y2):
     '''
     Input: 2 points that define a line to reflect about.
@@ -129,5 +149,3 @@ def reflect_about(x1, y1, x2, y2):
     True
     '''
     pass
-
-

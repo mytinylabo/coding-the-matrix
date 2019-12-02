@@ -3,8 +3,6 @@
 __pycache__
 .ipynb_checkpoints
 
-tmp
-
 profile.txt
 stories_small.txt
 stories_big.txt
