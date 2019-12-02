@@ -137,8 +137,9 @@ def openinbrowser(url, browser=None):
 
 # Create a temporary file that will be removed at exit
 # Returns a path to the file
-def _create_temp(suffix='', prefix='tmp', dir=None):
+def _create_temp(suffix='', prefix='tmp', dir=f'{os.getcwd()}/tmp'):
     _f, path = tempfile.mkstemp(suffix, prefix, dir)
+    print(f'open {path} in browser')
     os.close(_f)
     _remove_at_exit(path)
     return path
