@@ -220,10 +220,11 @@ def matrix_matrix_mul(A, B):
     """
     assert A.D[1] == B.D[0]
 
+    pairs = [[(s, u), [((s, t), (t, u)) for t in A.D[1] if (s, t) in A.f and (t, u) in B.f]] for s in A.D[0] for u in B.D[1]]
+
     m = Mat((A.D[0], B.D[1]), {})
-    pairs = {(a, b) for a in A.f.keys() for b in B.f.keys() if a[1] == b[0]}
-    for a, b in pairs:
-        m[a[0], b[1]] += A[a] * B[b]
+    for ab, c in pairs:
+        m.f[ab] = sum([A.f[a] * B.f[b] for a, b in c])
 
     return m
 
