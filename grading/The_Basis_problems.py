@@ -9,8 +9,7 @@ from vec import Vec
 from vecutil import list2vec
 
 
-
-## 1: (Problem 5.14.1) Span of Vectors over R, A
+# 1: (Problem 5.14.1) Span of Vectors over R, A
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 #
@@ -21,8 +20,7 @@ rep_2 = [...]
 rep_3 = [...]
 
 
-
-## 2: (Problem 5.14.2) Span of Vectors over R, B
+# 2: (Problem 5.14.2) Span of Vectors over R, B
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
@@ -32,8 +30,7 @@ lin_comb_coefficients_3 = [...]
 lin_comb_coefficients_4 = [...]
 
 
-
-## 3: (Problem 5.14.3) Span of Vectors over GF2 A
+# 3: (Problem 5.14.3) Span of Vectors over GF2 A
 # Use one from the GF2 module, not the integer 1.
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
@@ -43,8 +40,7 @@ gf2_rep_2 = [...]
 gf2_rep_3 = [...]
 
 
-
-## 4: (Problem 5.14.4) Span of Vectors over GF2 B
+# 4: (Problem 5.14.4) Span of Vectors over GF2 B
 # Use one from the GF2 module, not the integer 1.
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
@@ -55,8 +51,7 @@ gf2_lc_rep_3 = [...]
 gf2_lc_rep_4 = [...]
 
 
-
-## 5: (Problem 5.14.5) Linear Dependence over R A
+# 5: (Problem 5.14.5) Linear Dependence over R A
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
@@ -65,8 +60,7 @@ lin_dep_R_2 = [...]
 lin_dep_R_3 = [...]
 
 
-
-## 6: (Problem 5.14.6) Linear Dependence over R B
+# 6: (Problem 5.14.6) Linear Dependence over R B
 # Please record your solution as a list of coefficients
 
 linear_dep_R_1 = [...]
@@ -74,8 +68,7 @@ linear_dep_R_2 = [...]
 linear_dep_R_3 = [...]
 
 
-
-## 7: (Problem 5.14.7) Superfluous vector
+# 7: (Problem 5.14.7) Superfluous vector
 # Choose one of the vectors to express as a linear combination of the other two,
 # and assign the name of that vector to sum_to (as a string)
 # For each of the other two vectors, assign the coefficient to the corresponding variable.
@@ -88,8 +81,7 @@ v_coeff = ...
 w_coeff = ...
 
 
-
-## 8: (Problem 5.14.8) 4 linearly dependent vectors, every 3 are independent
+# 8: (Problem 5.14.8) 4 linearly dependent vectors, every 3 are independent
 # Please use the Vec class to represent your vectors
 
 indep_vec_1 = Vec({...}, {})
@@ -98,8 +90,7 @@ indep_vec_3 = Vec({...}, {})
 indep_vec_4 = Vec({...}, {})
 
 
-
-## 9: (Problem 5.14.9) Linear Dependence over GF(2) A
+# 9: (Problem 5.14.9) Linear Dependence over GF(2) A
 # For each subproblem, assign to the corresponding variable the list of
 # coefficients (0 or one) for which the linear combination is zero.
 
@@ -108,8 +99,7 @@ zero_comb_2 = [...]
 zero_comb_3 = [...]
 
 
-
-## 10: (Problem 5.14.10) Linear Dependence over GF(2) B
+# 10: (Problem 5.14.10) Linear Dependence over GF(2) B
 # In each subproblem, give your solution as a list of coefficients selected from {0, one}
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5]
@@ -125,17 +115,15 @@ sum_to_zero_3 = [...]
 sum_to_zero_4 = [...]
 
 
-
-## 11: (Problem 5.14.11) Exchange Lemma for Vectors over $\R$
-## Please express your answer as a list of ints, such as [1,0,0,0,0]
+# 11: (Problem 5.14.11) Exchange Lemma for Vectors over $\R$
+# Please express your answer as a list of ints, such as [1,0,0,0,0]
 
 exchange_1 = [...]
 exchange_2 = [...]
 exchange_3 = [...]
 
 
-
-## 12: (Problem 5.14.12) Exchange Lemma for Vectors over GF(2)
+# 12: (Problem 5.14.12) Exchange Lemma for Vectors over GF(2)
 # Please give the name of the vector you want to replace as a string (e.g. 'v1')
 
 replace_1 = ...
@@ -143,8 +131,7 @@ replace_2 = ...
 replace_3 = ...
 
 
-
-## 13: (Problem 5.14.13) rep2vec
+# 13: (Problem 5.14.13) rep2vec
 def rep2vec(u, veclist):
     '''
     Input:
@@ -165,8 +152,7 @@ def rep2vec(u, veclist):
     pass
 
 
-
-## 14: (Problem 5.14.14) vec2rep
+# 14: (Problem 5.14.14) vec2rep
 def vec2rep(veclist, v):
     '''
     Input:
@@ -182,11 +168,11 @@ def vec2rep(veclist, v):
         >>> vec2rep([v0,v1,v2], v)  == Vec({0, 1, 2},{0: 1.5, 1: -0.25, 2: 1.25})
         True
     '''
-    pass
+    A = coldict2mat({i: col for i, col in enumerate(veclist)})
+    return solve(A, v)
 
 
-
-## 15: (Problem 5.14.15) Superfluous Vector in Python
+# 15: (Problem 5.14.15) Superfluous Vector in Python
 def is_superfluous(L, i):
     '''
     Input:
@@ -216,8 +202,7 @@ def is_superfluous(L, i):
     pass
 
 
-
-## 16: (Problem 5.14.16) is_independent in Python
+# 16: (Problem 5.14.16) is_independent in Python
 def is_independent(L):
     '''
     Input:
@@ -248,13 +233,12 @@ def is_independent(L):
     pass
 
 
-
-## 17: (Problem 5.14.17) Subset Basis
+# 17: (Problem 5.14.17) Subset Basis
 def subset_basis(T):
     '''
     Input:
         - T: a list of Vecs
-    Output: 
+    Output:
         - list S containing Vecs from T that is a basis for the space spanned by T.
     Examples:
         The following tests use the procedures is_superfluous and is_independent,
@@ -287,8 +271,7 @@ def subset_basis(T):
     pass
 
 
-
-## 18: (Problem 5.14.18) Superset Basis Lemma in Python
+# 18: (Problem 5.14.18) Superset Basis Lemma in Python
 def superset_basis(T, L):
     '''
     Input:
@@ -316,8 +299,7 @@ def superset_basis(T, L):
     pass
 
 
-
-## 19: (Problem 5.14.19) Exchange Lemma in Python
+# 19: (Problem 5.14.19) Exchange Lemma in Python
 def exchange(S, A, z):
     '''
     Input:
@@ -333,4 +315,3 @@ def exchange(S, A, z):
         True
     '''
     pass
-
