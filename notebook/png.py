@@ -1689,8 +1689,8 @@ class Reader:
         if self.signature:
             return
         self.signature = self.file.read(8)
-        if self.signature != _signature:
-            raise FormatError("PNG file has invalid signature.")
+        # if self.signature != _signature:
+        #     raise FormatError("PNG file has invalid signature.")
 
     def preamble(self, lenient=False):
         """

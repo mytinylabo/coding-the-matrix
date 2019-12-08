@@ -3,33 +3,31 @@
 
 from vec import Vec
 from mat import Mat
-from matutil import rowdict2mat
+from matutil import rowdict2mat, mat2coldict, coldict2mat
 from solver import solve
 
 
-
-## 1: (Task 5.12.1) Move To Board
-def move2board(y): 
+# 1: (Task 5.12.1) Move To Board
+def move2board(y):
     '''
     Input:
         - y: a Vec with domain {'y1','y2','y3'}, the coordinate representation in whiteboard coordinates of a point q
     Output:
         - A {'y1','y2','y3'}-Vec, the coordinate representation
-          in whiteboard coordinates of the point p such that the line through the 
+          in whiteboard coordinates of the point p such that the line through the
           origin and q intersects the whiteboard plane at p.
     '''
-    return Vec({'y1','y2','y3'}, ...)
+    # return Vec({'y1','y2','y3'}, ...)
+    return Vec({'y1', 'y2', 'y3'}, {'y1': y['y1'] / y['y3'], 'y2': y['y2'] / y['y3'], 'y3': 1})
 
 
-
-## 2: () Make domain of vector
+# 2: () Make domain of vector
 # D should be assigned the Cartesian product of R and C
-D = ...
+D = {(r, c) for r in {'y1', 'y2', 'y3'} for c in {'x1', 'x2', 'x3'}}
 
 
-
-## 3: (Task 5.12.2) Make Equations
-def make_equations(x1, x2, w1, w2): 
+# 3: (Task 5.12.2) Make Equations
+def make_equations(x1, x2, w1, w2):
     '''
     Input:
         - x1, x2: pixel coordinates of a point q in the image plane
@@ -49,7 +47,7 @@ def make_equations(x1, x2, w1, w2):
     the whiteboard, so its whiteboard coordinates are 0,1,1.  Therefore (y1/y3,y2/y3,y3/y3) = (0,1,1).
     We define w1=y1/y3 and w2=y2/y3, so w1 = 0 and w2 = 1.  Given this input-output pair, let's find
     two linear equations u*h=0 and v*h=0 constraining the unknown vector h whose entries are the entries
-    of the matrix H. 
+    of the matrix H.
 
 >>> for v in make_equations(8,25,1,0): print(v)
 <BLANKLINE>
@@ -80,26 +78,23 @@ def make_equations(x1, x2, w1, w2):
 
     Again, the negations of these vectors form an equally valid solution.
     '''
-    u = Vec(D, ...)
-    v = Vec(D, ...)
+    u = Vec(D, {('y3', 'x1'): w1 * x1, ('y3', 'x2'): w1 * x2, ('y3', 'x3'): w1 * 1, ('y1', 'x1'): -x1, ('y1', 'x2'): -x2, ('y1', 'x3'): -1})
+    v = Vec(D, {('y3', 'x1'): w2 * x1, ('y3', 'x2'): w2 * x2, ('y3', 'x3'): w2 * 1, ('y2', 'x1'): -x1, ('y2', 'x2'): -x2, ('y2', 'x3'): -1})
     return [u, v]
 
 
-
-## 4: () Scaling row
+# 4: () Scaling row
 # This is the vector defining the scaling equation
-w = Vec(D, {...})
+w = Vec(D, {('y1', 'x1'): 1})
 
 
-
-## 5: () Right-hand side
+# 5: () Right-hand side
 # Now construct the Vec b that serves as the right-hand side for the matrix-vector equation L*hvec=b
 # This is the {0, ..., 8}-Vec whose entries are all zero except for a 1 in position 8
-b = ...
+b = Vec(set(range(9)), {8: 1})
 
 
-
-## 6: () Rows of constraint matrix
+# 6: () Rows of constraint matrix
 def make_nine_equations(corners):
     '''
     input: a list of four tuples:
@@ -114,30 +109,31 @@ def make_nine_equations(corners):
     Vecs u4,u5 come from applying make_equations to the top-right corner,
     Vecs u6,u7 come from applying make_equations to the bottom-right corner,
     Vec u8 is the vector w.
-    ''' 
-    pass
+    '''
+    vecs = []
+    for x, w in zip(corners, [(0, 0), (0, 1), (1, 0), (1, 1)]):
+        vecs.extend(make_equations(*x, *w))
+    vecs.append(Vec(D, {('y1', 'x1'): 1}))
+    return vecs
 
 
-
-## 7: (Task 5.12.4) Build linear system
+# 7: (Task 5.12.4) Build linear system
 # Apply make_nine_equations to the list of tuples specifying the pixel coordinates of the
 # whiteboard corners in the image.  Assign the resulting list of nine vectors to veclist:
-veclist = ...
+veclist = make_nine_equations([(358, 36), (329, 597), (592, 157), (580, 483)])
 
 # Build a Mat whose rows are the Vecs in veclist
-L = ...
+L = rowdict2mat({i: v for i, v in enumerate(veclist)})
 
 
-
-## 8: () Solve linear system
+# 8: () Solve linear system
 # Now solve the matrix-vector equation to get a Vec hvec, and turn it into a matrix H.
-hvec = ...
+hvec = solve(L, b)
 
-H = ...
+H = Mat(({'y1', 'y2', 'y3'}, {'x1', 'x2', 'x3'}), hvec.f)
 
 
-
-## 9: (Task 5.12.7) Y Board Comprehension
+# 9: (Task 5.12.7) Y Board Comprehension
 def mat_move2board(Y):
     '''
     Input:
@@ -145,7 +141,7 @@ def mat_move2board(Y):
           giving the whiteboard coordinates of a point q.
     Output:
         - a Mat each column of which is the corresponding point in the
-          whiteboard plane (the point of intersection with the whiteboard plane 
+          whiteboard plane (the point of intersection with the whiteboard plane
           of the line through the origin and q).
 
     Example:
@@ -171,5 +167,4 @@ def mat_move2board(Y):
      y3  |     1 1    1    1
     <BLANKLINE>
     '''
-    pass
-
+    return coldict2mat({c: move2board(v) for c, v in mat2coldict(Y).items()})
