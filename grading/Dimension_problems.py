@@ -4,48 +4,55 @@
 from vecutil import list2vec
 from GF2 import one
 from solver import solve
-from matutil import listlist2mat, coldict2mat
+from matutil import listlist2mat, coldict2mat, mat2coldict, mat2rowdict, rowdict2mat
 from mat import Mat
 from vec import Vec
+from The_Basis_problems import vec2rep, subset_basis
+from independence import rank, is_independent
+from triangular import triangular_solve
 
+# 1: (Problem 6.7.2) Iterative Exchange Lemma
+w0 = list2vec([1, 0, 0])
+w1 = list2vec([0, 1, 0])
+w2 = list2vec([0, 0, 1])
 
-
-## 1: (Problem 6.7.2) Iterative Exchange Lemma
-w0 = list2vec([1,0,0])
-w1 = list2vec([0,1,0])
-w2 = list2vec([0,0,1])
-
-v0 = list2vec([1,2,3])
-v1 = list2vec([1,3,3])
-v2 = list2vec([0,3,3])
+v0 = list2vec([1, 2, 3])
+v1 = list2vec([1, 3, 3])
+v2 = list2vec([0, 3, 3])
 
 # Fill in exchange_S1 and exchange_S2
 # with appropriate lists of 3 vectors
 
 exchange_S0 = [w0, w1, w2]
-exchange_S1 = [...]
-exchange_S2 = [...]
+exchange_S1 = [v0, w1, w2]
+exchange_S2 = [v0, v1, w2]
 exchange_S3 = [v0, v1, v2]
 
 
+# 2: (Problem 6.7.3) Another Iterative Exchange Lemma
+w0 = list2vec([0, one, 0])
+w1 = list2vec([0, 0, one])
+w2 = list2vec([one, one, one])
 
-## 2: (Problem 6.7.3) Another Iterative Exchange Lemma
-w0 = list2vec([0,one,0])
-w1 = list2vec([0,0,one])
-w2 = list2vec([one,one,one])
-
-v0 = list2vec([one,0,one])
-v1 = list2vec([one,0,0])
-v2 = list2vec([one,one,0])
+v0 = list2vec([one, 0, one])
+v1 = list2vec([one, 0, 0])
+v2 = list2vec([one, one, 0])
 
 exchange_2_S0 = [w0, w1, w2]
-exchange_2_S1 = [...]
-exchange_2_S2 = [...]
+exchange_2_S1 = [v0, w1, w2]
+exchange_2_S2 = [v0, v1, w2]
 exchange_2_S3 = [v0, v1, v2]
 
 
+def exchange(S, A, z):
+    u = vec2rep(S, z)
+    for i, v in enumerate(S):
+        coef = u[i]
+        if v not in A and coef != 0:
+            return v
 
-## 3: (Problem 6.7.4) Morph Lemma Coding
+
+# 3: (Problem 6.7.4) Morph Lemma Coding
 def morph(S, B):
     '''
     Input:
@@ -79,28 +86,37 @@ def morph(S, B):
         >>> sol == [(B[0],S[0]), (B[1],S[2]), (B[2],S[3])] or sol == [(B[0],S[1]), (B[1],S[2]), (B[2],S[3])]
         True
     '''
-    pass
+    A = []
+    T = S.copy()
+    result = []
+    for b in B:
+        fired = exchange(T, A, b)
+        T.remove(fired)
+        T.append(b)
+        result.append((b, fired))
+    return result
 
 
+def list2veclist(*args):
+    return [list2vec(l) for l in args]
 
-## 4: (Problem 6.7.5) Row and Column Rank Practice
+
+# 4: (Problem 6.7.5) Row and Column Rank Practice
 # Please express each solution as a list of Vecs
+row_space_1 = list2veclist([1, 2, 0], [0, 2, 1])
+col_space_1 = list2veclist([1, 0], [0, 1])
 
-row_space_1 = [...]
-col_space_1 = [...]
+row_space_2 = list2veclist([1, 4, 0, 0], [0, 2, 2, 0], [0, 0, 1, 1])
+col_space_2 = list2veclist([1, 0, 0], [4, 2, 0], [0, 2, 1])
 
-row_space_2 = [...]
-col_space_2 = [...]
+row_space_3 = list2veclist([1])
+col_space_3 = list2veclist([1, 2, 3])
 
-row_space_3 = [...]
-col_space_3 = [...]
-
-row_space_4 = [...]
-col_space_4 = [...]
-
+row_space_4 = list2veclist([1, 0], [2, 1])
+col_space_4 = list2veclist([1, 2, 3], [0, 1, 4])
 
 
-## 5: (Problem 6.7.6) My Is Independent Procedure
+# 5: (Problem 6.7.6) My Is Independent Procedure
 def my_is_independent(L):
     '''
     Input:
@@ -127,16 +143,15 @@ def my_is_independent(L):
         >>> L == [Vec(D,{0: 1}), Vec(D,{1: 1}), Vec(D,{2: 1}), Vec(D,{0: 1, 1: 1, 2: 1}), Vec(D,{0: 1, 1: 1}), Vec(D,{1: 1, 2: 1})]
         True
     '''
-    pass
+    return len(L) == rank(L)
 
 
-
-## 6: (Problem 6.7.7) My Rank
+# 6: (Problem 6.7.7) My Rank
 def my_rank(L):
     '''
-    Input: 
+    Input:
         - L: a list of Vecs
-    Output: 
+    Output:
         - the rank of the list of Vecs
     Example:
         >>> L = [list2vec(v) for v in [[1,2,3],[4,5,6],[1.1,1.1,1.1]]]
@@ -147,20 +162,17 @@ def my_rank(L):
         >>> my_rank([list2vec(v) for v in [[1,1,1],[2,2,2],[3,3,3],[4,4,4],[123,432,123]]])
         2
     '''
-    pass
+    return len(subset_basis(L))
 
 
-
-## 7: (Problem 6.7.9) Direct Sum Validity
+# 7: (Problem 6.7.9) Direct Sum Validity
 # Please give each answer as a boolean
-
-only_share_the_zero_vector_1 = ...
-only_share_the_zero_vector_2 = ...
-only_share_the_zero_vector_3 = ...
-
+only_share_the_zero_vector_1 = True
+only_share_the_zero_vector_2 = True
+only_share_the_zero_vector_3 = True
 
 
-## 8: (Problem 6.7.11) Direct Sum Unique Representation
+# 8: (Problem 6.7.11) Direct Sum Unique Representation
 def direct_sum_decompose(U_basis, V_basis, w):
     '''
     Input:
@@ -199,11 +211,15 @@ def direct_sum_decompose(U_basis, V_basis, w):
         >>> w == Vec(D,{0: 2, 1: 5, 2: 0, 3: 0, 4: 1, 5: 0})
         True
     '''
-    pass
+    rep_w = vec2rep(U_basis + V_basis, w)
+    rep_u = [rep_w[i] for i in range(len(U_basis))]
+    rep_v = [rep_w[len(U_basis) + i] for i in range(len(V_basis))]
+    u = coldict2mat(U_basis) * list2vec(rep_u)
+    v = coldict2mat(V_basis) * list2vec(rep_v)
+    return (u, v)
 
 
-
-## 9: (Problem 6.7.12) Is Invertible Function
+# 9: (Problem 6.7.12) Is Invertible Function
 def is_invertible(M):
     '''
     input: A matrix, M
@@ -217,11 +233,12 @@ def is_invertible(M):
     >>> is_invertible(M1)
     False
     '''
-    pass
+    if len(M.D[0]) != len(M.D[1]):
+        return False
+    return is_independent(list(mat2coldict(M).values()))
 
 
-
-## 10: (Problem 6.7.13) Inverse of a Matrix over GF(2)
+# 10: (Problem 6.7.13) Inverse of a Matrix over GF(2)
 def find_matrix_inverse(A):
     '''
     Input:
@@ -233,11 +250,15 @@ def find_matrix_inverse(A):
         >>> find_matrix_inverse(M1) == Mat(M1.D, {(0, 1): one, (1, 0): one, (2, 2): one})
         True
     '''
-    pass
+    x = []
+    n = len(A.D[0])
+    for i in range(n):
+        bi = list2vec([one if i == j else 0 for j in range(n)])
+        x.append(solve(A, bi))
+    return coldict2mat(x)
 
 
-
-## 11: (Problem 6.7.14) Inverse of a Triangular Matrix
+# 11: (Problem 6.7.14) Inverse of a Triangular Matrix
 def find_triangular_matrix_inverse(A):
     '''
     Supporting GF2 is not required.
@@ -246,11 +267,16 @@ def find_triangular_matrix_inverse(A):
         - A: an upper triangular Mat with nonzero diagonal elements
     Output:
         - Mat that is the inverse of A
-    
+
     Example:
         >>> A = listlist2mat([[1, .5, .2, 4],[0, 1, .3, .9],[0,0,1,.1],[0,0,0,1]])
         >>> find_triangular_matrix_inverse(A) == Mat(({0, 1, 2, 3}, {0, 1, 2, 3}), {(0, 1): -0.5, (1, 2): -0.3, (3, 2): 0.0, (0, 0): 1.0, (3, 3): 1.0, (3, 0): 0.0, (3, 1): 0.0, (2, 1): 0.0, (0, 2): -0.05000000000000002, (2, 0): 0.0, (1, 3): -0.87, (2, 3): -0.1, (2, 2): 1.0, (1, 0): 0.0, (0, 3): -3.545, (1, 1): 1.0})
         True
     '''
-    pass
-
+    x = []
+    n = len(A.D[0])
+    rowlist = list(mat2rowdict(A).values())
+    for i in range(n):
+        bi = list2vec([1 if i == j else 0 for j in range(n)])
+        x.append(triangular_solve(rowlist, range(n), bi))
+    return coldict2mat(x)
