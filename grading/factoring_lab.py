@@ -28,7 +28,7 @@ def int2GF2(i):
         >>> int2GF2(100)
         0
     '''
-    pass
+    return one if i % 2 == 1 else 0
 
 ## Task 2
 def make_Vec(primeset, factors):
@@ -44,7 +44,7 @@ def make_Vec(primeset, factors):
         >>> make_Vec({2,3,11}, [(2,3), (3,2)]) == Vec({2,3,11},{2:one})
         True
     '''
-    pass
+    return Vec(primeset, {p: int2GF2(a) for p, a in factors})
 
 ## Task 3
 def find_candidates(N, primeset):
@@ -82,14 +82,24 @@ def find_candidates(N, primeset):
                 Vec(D,{2: one, 3: one, 13: one})])
         True
     '''
-    pass
-
+    roots = []
+    rowlist = []
+    i = 2
+    sqrtN = intsqrt(N)
+    while len(roots) <= len(primeset):
+        x = sqrtN + i
+        factors = dumb_factor(x**2 - N, primeset)
+        if factors:
+            roots.append(x)
+            rowlist.append(make_Vec(primeset, factors))
+        i += 1
+    return (roots, rowlist)
 
 
 ## Task 4
 def find_a_and_b(v, roots, N):
     '''
-    Input: 
+    Input:
      - a {0,1,..., n-1}-vector v over GF(2) where n = len(roots)
      - a list roots of integers
      - an integer N to factor
@@ -100,7 +110,7 @@ def find_a_and_b(v, roots, N):
     Example:
         >>> roots = [51, 52, 53, 58, 61, 62, 63, 67, 68, 71, 77, 79]
         >>> N = 2419
-        >>> v = Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11},{1: one, 2: one, 11: one, 5: one})  
+        >>> v = Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11},{1: one, 2: one, 11: one, 5: one})
         >>> find_a_and_b(v, roots, N)
         (13498888, 778050)
         >>> v = Vec({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11},{0: 0, 1: 0, 10: one, 2: one})
@@ -111,4 +121,4 @@ def find_a_and_b(v, roots, N):
 
 ## Task 5
 
-nontrivial_divisor_of_2461799993978700679 = ... 
+nontrivial_divisor_of_2461799993978700679 = ...
