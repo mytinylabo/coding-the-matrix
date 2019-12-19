@@ -117,8 +117,12 @@ def find_a_and_b(v, roots, N):
         >>> find_a_and_b(v, roots, N)
         (4081, 1170)
     '''
-    pass
+    alist = [roots[i] for i in v.D if v[i] == one]
+    a = prod(alist)
+    c = prod({x**2 - N for x in alist})
+    b = intsqrt(c)
+    return (a, b)
 
 ## Task 5
 
-nontrivial_divisor_of_2461799993978700679 = ...
+nontrivial_divisor_of_2461799993978700679 = 1230926561
