@@ -79,7 +79,7 @@ def find_grad(A, b, w):
         >>> find_grad(A, b, w) == Vec({'B', 'A'},{'B': -290, 'A': 60})
         True
     '''
-    pass
+    return 2 * ((A * w - b) * A)
 
 
 ## Task 5 ##
@@ -101,11 +101,11 @@ def gradient_descent_step(A, b, w, sigma):
         >>> gradient_descent_step(A, b, w, sigma) == Vec({'B', 'A'},{'B': 27.0, 'A': -5.0})
         True
     '''
-    pass
+    return w - sigma * find_grad(A, b, w)
 
 
 ## Ungraded task ##
-def gradient_descent(A, b, w, sigma, T):
+def gradient_descent(A, b, w, sigma, T, dump_step=30):
     '''
     Input:
         - A: feature Mat
@@ -115,4 +115,12 @@ def gradient_descent(A, b, w, sigma, T):
         - T: number of iterations to run
     Output: hypothesis vector obtained after T iterations of gradient descent.
     '''
-    pass
+    v = w
+    for i in range(T):
+        if i % dump_step == 0:
+            print(f'i={i}, loss={loss(A, b, v)}, wrong={fraction_wrong(A, b, v)}')
+        v = gradient_descent_step(A, b, v, sigma)
+
+    print(f'{T} done, loss={loss(A, b, v)}, wrong={fraction_wrong(A, b, v)}')
+    return v
+
